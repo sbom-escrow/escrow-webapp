@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import Cookies from 'universal-cookie';
+import Identity from '../infrastructure/Identity';
 
 import {
   Button, UncontrolledAlert, Card, CardImg, CardBody,
@@ -16,8 +16,8 @@ const Login = () => {
   const[dataInput, setDataInput]=useState(""); 
   const submitThis=()=>{
     const info={email:email,passw:passw}; 
-    var cookies = new Cookies();
-    cookies.set('token', 'token', { path: '/' });
+    var identity = new Identity();
+    identity.Login();
     window.location='/';
   }
 

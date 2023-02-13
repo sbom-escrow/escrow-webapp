@@ -14,28 +14,55 @@ import './index.css';
 import Header from './components/Header';
 import Login from './routes/Login';
 import Root from './routes/Root';
+import Vendor from './routes/Vendor';
+import Client from './routes/Client';
+import SbomView from './routes/SbomView';
+import Identity from './infrastructure/Identity';
 import reportWebVitals from './reportWebVitals';
 import Cookies from 'universal-cookie';
 
-
+const authLoader = () => {
+  var identity = new Identity();
+  var token = identity.GetToken();
+  if(!token){
+    throw redirect("login");
+  }
+  return {};
+}
 
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
-  },
-  {
-    path: "/",
-    element: <Root />,
     loader: () => {
-      var cookies = new Cookies();
-      var token = cookies.get('token');
-      if(!token){
-        throw redirect("login");
+      var identity = new Identity();
+      var token = identity.GetToken();
+      if(token){
+        throw redirect("/");
       }
       return {};
     }
   },
+  {
+    path: "/",
+    element: <Root />,
+    loader: authLoader
+  },
+  {
+    path: "/vendor",
+    element: <Vendor />,
+    loader:authLoader
+  },
+  {
+      path: "/vendor/sbom/:name/:version",
+      element: <SbomView />,
+      loader:authLoader
+  },
+  {
+    path: "/client",
+    element: <Client />,
+    loader: authLoader
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
