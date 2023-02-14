@@ -13,15 +13,18 @@ class VendorView extends Component {
       sboms:[
         new Sbom({
           name : 'Test1',
-          version : '1.0'
+          version : '1.0',
+          vendor : 'My Company'
         }),
         new Sbom({
           name : 'Test2',
-          version : '1.0.3.2'
+          version : '1.0.3.2',
+          vendor : 'My Company'
         }),
         new Sbom({
           name : 'Test3',
-          version : '.01b'
+          version : '.01b',
+          vendor : 'My Company'
         })
       ],
       modal:false,
@@ -68,7 +71,8 @@ class VendorView extends Component {
       let newSbom = [...state.sboms]
       newSbom.push(new Sbom({
           name : state.modalName,
-          version : state.modalVersion
+          version : state.modalVersion,
+          vendor : 'My Company'
         }))
       
       return {

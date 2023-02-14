@@ -17,6 +17,7 @@ import Root from './routes/Root';
 import VendorView from './routes/VendorView';
 import Client from './routes/Client';
 import VendorSbom from './routes/VendorSbom';
+import ClientSbom from './routes/ClientSbom';
 import Identity from './infrastructure/Identity';
 import reportWebVitals from './reportWebVitals';
 import Cookies from 'universal-cookie';
@@ -62,6 +63,11 @@ const router = createBrowserRouter([
     path: "/client",
     element: <Client />,
     loader: authLoader
+  },
+  {
+      path: "/client/:vendor/sbom/:name/:version",
+      element: <ClientSbom />,
+      loader:authLoader
   }
 ]);
 
