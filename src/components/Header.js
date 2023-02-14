@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../logo.svg';
+import logo from '../Logo.png';
 import IdentityBar from './IdentityBar';
 import PrivilegedItems from './PrivilegedItems';
 
@@ -24,7 +24,7 @@ const Header = () => {
           </Col>
           
           <Col className="d-flex justify-content-xs-start justify-content-lg-center">
-            <NavbarBrand className="d-inline-block p-0" href="/" style={{ width: 80 }}>
+            <NavbarBrand className="d-inline-block p-0" href="/" style={{ width: 80, margin: '0px 0px 2px 0px'}}>
               <img src={logo} alt="logo" className="position-relative img-fluid" />
             </NavbarBrand>
           </Col>
