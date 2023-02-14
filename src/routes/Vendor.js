@@ -24,21 +24,69 @@ class Vendor extends Component {
           version : '.01b'
         })
       ],
-      modal:false
+      modal:false,
+      modalName:null,
+      modalVersion:null,
+      modalFile:null
     }
 
-    this.toggle = this.toggle.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.uploadModal = this.uploadModal.bind(this);
+    this.setModalName = this.setModalName.bind(this);
+    this.setModalVersion = this.setModalVersion.bind(this);
+    this.setModalFile = this.setModalFile.bind(this);
   }
 
-  toggle() {
+  setModalName(name){
+    this.setState((state, props) => {
+      return {modalName: name};
+    });
+  }
+
+  setModalVersion(version){
+    this.setState((state, props) => {
+      return {modalVersion: version};
+    });
+  }
+
+  setModalFile(file){
+    this.setState((state, props) => {
+      return {modalFile: file};
+    });
+  }
+
+  toggleModal() {
     this.setState((state, props) => {
       return {modal: !state.modal};
+    });
+  }
+
+  uploadModal() {
+    this.setState((state, props) => {
+      if(!state.modalName || !state.modalVersion)
+        return {};
+      let newSbom = [...state.sboms]
+      newSbom.push(new Sbom({
+          name : state.modalName,
+          version : state.modalVersion
+        }))
+      
+      return {
+        sboms: newSbom,
+        modal:false,
+        modalName:null,
+        modalVersion:null,
+        modalFile:null
+      };
     });
   }
 
   render() {
     const sboms = this.state.sboms;    
     const modal = this.state.modal;
+    const modalName = this.state.modalName;
+    const modalVersion = this.state.modalVersion;
+    const modalFile = this.state.modalFile;
     return (
       <Fragment>
         <div className="position-relative">                
@@ -63,22 +111,30 @@ class Vendor extends Component {
           </Table>
           <Row>
             <Col xs='2'>
-              <Button color="danger" onClick={this.toggle}>
+              <Button color="danger" onClick={this.toggleModal}>
                 Upload Sbom
               </Button>
             </Col>
           </Row>
         </div>
-        <Modal isOpen={modal} toggle={this.toggle} >
-          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+        <Modal isOpen={modal} toggleModal={this.toggleModal} >
+          <ModalHeader toggleModal={this.toggleModal}>Modal title</ModalHeader>
           <ModalBody>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-            minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            <Form>
+                  <FormGroup>
+                    <Label for="modal-name">Software Name</Label>
+                    <Input type="text" name="modal-name" id="modal-name" value={modalName} onChange={(e)=>this.setModalName(e.target.value)}/>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="modal-version">Version</Label>
+                    <Input type="text" name="modal-version" id="modal-version" value={modalVersion} onChange={(e)=>this.setModalVersion(e.target.value)}/>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="modal-source">Source Code</Label>
+                    <Input type="file" name="modal-source" id="modal-source" value={modalFile} onChange={(e)=>this.setModalFile(e.target.value)}/>
+                  </FormGroup>
+                  <Button onClick={this.uploadModal}>Upload</Button>
+                </Form>
           </ModalBody>
         </Modal>
       </Fragment>
