@@ -1,8 +1,27 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
+import Vendor from '../infrastructure/Vendor';
 import { Badge } from 'reactstrap';
 
 class Client extends Component {
+  constructor(){
+    super();
+    this.state = { 
+      searchTerm:null,
+      vendors:[
+        new Vendor({
+          name : 'BigCompnay'
+        }),
+        new Vendor({
+          name : 'MediumCompany'
+        }),
+        new Vendor({
+          name : 'LittleCompany'
+        })
+      ]
+    }
+  }
+
 
   render() {
     return (

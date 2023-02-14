@@ -2,20 +2,30 @@ import React, { Component, Fragment, useState } from 'react';
 import axios from 'axios';
 import Sbom from '../infrastructure/Sbom';
 import { ListGroup, ListGroupItem } from 'reactstrap';
-import { Link, useParams } from 'react-router-dom';
 
-const SbomView = () => {
-  const { name, version } = useParams();
-  const sbom = new Sbom({
-    name : name,
-    version : version
-  });
+class SbomView extends Component {
+  constructor(props){
+    super(props);
+    this.state = { 
+      sbom: new Sbom({
+        name : props.name,
+        version : props.version,
+        vendor : props.vendor
+      })
+    }
+  }
 
-  return(
-    <Fragment>
+  render() {
+    const sbom = this.state.sbom; 
+    return (
+      <Fragment>
         <div className="position-relative">                
           <span className="d-block pb-4 h2 text-dark border-bottom border-gray">{sbom.name}</span>          
           <ListGroup>
+            <ListGroupItem>
+              <strong>Vendor:</strong>
+              <span>{sbom.vendor}</span>
+            </ListGroupItem>
             <ListGroupItem>
               <strong>Version:</strong>
               <span>{sbom.version}</span>
@@ -26,7 +36,9 @@ const SbomView = () => {
             </ListGroupItem>
           </ListGroup>
         </div>
-      </Fragment>)
+      </Fragment>
+    );
+  }
 }
 
 export default SbomView;

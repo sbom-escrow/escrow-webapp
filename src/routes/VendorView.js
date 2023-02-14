@@ -6,7 +6,7 @@ import {
   Form, FormGroup, Label, Input} from 'reactstrap';
 import { Link} from 'react-router-dom';
 
-class Vendor extends Component {
+class VendorView extends Component {
   constructor(){
     super();
     this.state = { 
@@ -90,7 +90,7 @@ class Vendor extends Component {
     return (
       <Fragment>
         <div className="position-relative">                
-          <span className="d-block pb-4 h2 text-dark border-bottom border-gray">Sboms</span>          
+          <span className="d-block pb-4 h2 text-dark border-bottom border-gray">My Company</span>          
           <Table hover>
             <thead>
               <th>Software Component Name</th>
@@ -143,4 +143,4 @@ class Vendor extends Component {
   
 }
 
-export default Vendor;
+export default VendorView;
