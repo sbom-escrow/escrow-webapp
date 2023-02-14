@@ -121,8 +121,8 @@ class VendorView extends Component {
             </Col>
           </Row>
         </div>
-        <Modal isOpen={modal} toggleModal={this.toggleModal} >
-          <ModalHeader toggleModal={this.toggleModal}>Modal title</ModalHeader>
+        <Modal isOpen={modal} toggle={this.toggleModal} >
+          <ModalHeader toggle={this.toggleModal}>Upload Software</ModalHeader>
           <ModalBody>
             <Form>
                   <FormGroup>

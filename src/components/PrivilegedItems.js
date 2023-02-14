@@ -23,10 +23,10 @@ const PrivilegedItems = () => {
           </NavItem>
           
           <NavItem className="d-flex align-items-center">
-            <NavLink className="font-weight-bold" href="/vendor">Vendor</NavLink>
+            <NavLink className="font-weight-bold" href="/vendor">My SBOMs</NavLink>
           </NavItem>
           <NavItem className="d-flex align-items-center">
-            <NavLink className="font-weight-bold" href="/client">Client</NavLink>
+            <NavLink className="font-weight-bold" href="/client">Subscribed SBOMs</NavLink>
           </NavItem>
                     
         </Nav>
