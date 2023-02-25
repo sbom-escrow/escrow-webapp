@@ -20,4 +20,8 @@ jobs:
           cd escrow-webapp
           git pull origin master
           git status
+          sudo npm install
+          sudo npm run build
+          cp -a ~/escrow-webapp/build/. /var/www/html/
+          sudo systemctl restart nginx
     
