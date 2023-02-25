@@ -1,0 +1,23 @@
+name: deploy and build on linode 
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  job_one:
+    name: deploy and build 
+    runs-on: ubuntu-latest
+    steps:
+    - name: ssh into server
+      uses: appleboy/ssh-action@master
+      with:
+        host: 66.175.218.173
+        username: root
+        password: ${{ secrets.REACT_SPA_PASS }}
+        port: 22
+        script: |
+          cd escrow-webapp
+          git pull origin master
+          git status
+    
