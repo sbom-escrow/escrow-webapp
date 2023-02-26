@@ -24,11 +24,9 @@ const Login = () => {
   const submitThisLogin=()=>{
     const info={email:email,passw:passw}; 
     var identity = new Identity();
-    var resp = signInWithEmail(email, passw);
+    signInWithEmail(email, passw);
     identity.Login();
-    if (resp.length == 1) {
-      window.location='/';
-    }
+    window.location='/';
   }
 
   return(
