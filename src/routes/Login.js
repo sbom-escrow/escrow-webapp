@@ -26,7 +26,7 @@ const Login = () => {
     var identity = new Identity();
     var resp = signInWithEmail(email, passw);
     identity.Login();
-    if (resp[1] == nil) {
+    if (resp.length == 1) {
       window.location='/';
     }
   }
