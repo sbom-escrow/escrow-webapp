@@ -8,6 +8,7 @@ async function signInWithEmail(emailStr) {
   const { data, error } = await supabase.auth.signInWithOtp({
     email: emailStr
   })
+  console.log(error);
 }
 
 async function signOut() {
