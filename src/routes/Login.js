@@ -20,7 +20,7 @@ const Login = () => {
     var identity = new Identity();
     identity.Login();
     signInWithEmail(email);
-    //window.location='/';
+    window.location='/';
   }
 
   return(
