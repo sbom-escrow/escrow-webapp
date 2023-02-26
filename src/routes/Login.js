@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import Identity from '../infrastructure/Identity';
-import { signInWithEmail } from '../infrastructure/supabaseClient';
+import { signInWithEmail, signUp } from '../infrastructure/supabaseClient';
 
 import {
   Button, UncontrolledAlert, Card, CardImg, CardBody,
@@ -15,12 +15,20 @@ const Login = () => {
   const[email,setEmail]=useState(""); 
   const[passw,setPassw]=useState("");
   const[dataInput, setDataInput]=useState(""); 
-  const submitThis=()=>{
+  
+  const submitThisSign=()=>{
+    const info={email:email,passw:passw}; 
+    signUp(email, passw);
+  }
+  
+  const submitThisLogin=()=>{
     const info={email:email,passw:passw}; 
     var identity = new Identity();
+    var resp = signInWithEmail(email, passw);
     identity.Login();
-    signInWithEmail(email);
-    //window.location='/';
+    if (resp[1] == nil) {
+      window.location='/';
+    }
   }
 
   return(
@@ -41,7 +49,8 @@ const Login = () => {
                     <Label for="password">Password</Label>
                     <Input type="password" name="password" id="password" value={passw} onChange={(e)=>setPassw(e.target.value)}/>
                   </FormGroup>
-                  <Button onClick={submitThis}>Login</Button>
+                  <Button onClick={submitThisLogin}>Login</Button>
+                  <Button onClick={submitThisSign}>Sign Up</Button>
                 </Form>
               </CardText>
             </CardBody>
