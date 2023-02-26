@@ -7,7 +7,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function signInWithEmail(emailStr, passwdStr) {
   const { data, error } = await supabase.auth.signUp({
   email: 'rizins@zins.dynu.com',
-  password: 'test'
+  password: 'test1234*'
 })
   console.log(error);
 }
