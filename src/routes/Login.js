@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import Identity from '../infrastructure/Identity';
+import { signInWithEmail } from '../infrastructure/supabaseClient';
 
 import {
   Button, UncontrolledAlert, Card, CardImg, CardBody,
@@ -18,7 +19,8 @@ const Login = () => {
     const info={email:email,passw:passw}; 
     var identity = new Identity();
     identity.Login();
-    window.location='/';
+    signInWithEmail(email);
+    //window.location='/';
   }
 
   return(
