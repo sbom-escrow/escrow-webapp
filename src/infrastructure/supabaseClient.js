@@ -16,3 +16,6 @@ async function signInWithEmail(emailStr) {
 async function signOut() {
   const { error } = await supabase.auth.signOut()
 }
+
+module.exports.signInWithEmail = signInWithEmail;
+module.exports.signOut = signOut;
