@@ -19,8 +19,8 @@ const Login = () => {
     const info={email:email,passw:passw}; 
     var identity = new Identity();
     identity.Login();
-    signInWithEmail(email);
-    window.location='/';
+    signInWithEmail(email, passw);
+    //window.location='/';
   }
 
   return(
