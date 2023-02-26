@@ -6,10 +6,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function signInWithEmail(emailStr) {
   const { data, error } = await supabase.auth.signInWithOtp({
-    email: emailStr,
-    options: {
-      emailRedirectTo: 'http://sbomescrow.com/',
-    },
+    email: emailStr
   })
 }
 
