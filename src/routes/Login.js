@@ -25,7 +25,7 @@ const Login = () => {
     const info={email:email,passw:passw}; 
     var identity = new Identity();
     var resp = signInWithEmail(email, passw);
-    console.log(resp.data);
+    console.log(resp[1]);
     //identity.Login();
     //window.location='/';
   }
