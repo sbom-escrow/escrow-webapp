@@ -16,7 +16,7 @@ class VendorView extends Component {
       modalName:null,
       modalVersion:null,
       modalSbomJson:null,
-      vendorName: "My Company"
+      vendorName: ""
     }
 
     this.toggleModal = this.toggleModal.bind(this);

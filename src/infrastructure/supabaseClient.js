@@ -85,5 +85,13 @@ async function setVendorName(name){
       ])
 }
 
+async function searchSboms(searchTerm){
+  const { data, error } = await supabase
+    .from('sboms')  
+    .select()
+    .textSearch('software_name', `'` + searchTerm + `'`)
+  return data;
+}
 
-export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName };
+
+export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms };

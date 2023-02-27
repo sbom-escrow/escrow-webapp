@@ -5,6 +5,7 @@ import {
   Table, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button,
   Form, FormGroup, Label, Input} from 'reactstrap';
 import { Link} from 'react-router-dom';
+import { searchSboms } from '../infrastructure/supabaseClient';
 
 class Client extends Component {
   constructor(){
@@ -36,18 +37,19 @@ class Client extends Component {
     this.setSearchTerm = this.setSearchTerm.bind(this);
   }
 
-  setSearchTerm(searchTerm){
+  async setSearchTerm(searchTerm){
+    const sbomDtos = await searchSboms(searchTerm);
     this.setState((state, props) => {
-      let searchSboms = [];
-      if(searchTerm)
-      {
-        searchSboms.push(new Sbom({
-          name : searchTerm,
-          version : '1.0',
-          vendor : searchTerm
-        }));
+      var sboms = [];
+      for(var i = 0; i < sbomDtos.length;i++){
+        const sbomDto = sbomDtos[i];
+        sboms.push(new Sbom({
+          name : sbomDto.software_name,
+          vendor : sbomDto.vendor_name,
+          version: sbomDto.software_version
+        }))          
       }
-      return {searchTerm: searchTerm, searchSboms: searchSboms};
+      return {searchSboms: sboms};
     });
   }
 
@@ -121,9 +123,8 @@ class Client extends Component {
             <Table hover>
             <thead>              
               <th>Vendor</th>
-              <th>Software Component Name</th>
+              <th>Software Name</th>
               <th>Version</th>
-              <th>SHA</th>
               <th></th>
             </thead>
             <tbody>
@@ -132,7 +133,6 @@ class Client extends Component {
                   <td>{sbom.vendor}</td>
                   <td>{sbom.name}</td>
                   <td>{sbom.version}</td>
-                  <td>{sbom.sourceSha}</td>
                   <td>
                     <Button color="success" onClick={() =>{this.addSbom(sbom)}}>
                       Subscribe
