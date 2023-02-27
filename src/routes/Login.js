@@ -4,7 +4,7 @@ import { signInWithEmail, signUp, getSession} from '../infrastructure/supabaseCl
 import {
   Button, UncontrolledAlert, Card, CardImg, CardBody,
   CardTitle, CardSubtitle, CardText, Row, Col, Form, 
-  FormGroup, Label, Input
+  FormGroup, Label, Input, FormFeedback
 } from 'reactstrap';
 
 
@@ -14,18 +14,23 @@ const Login = () => {
   const[email,setEmail]=useState(""); 
   const[passw,setPassw]=useState("");
   const[dataInput, setDataInput]=useState(""); 
-  
+
+  const[failedLogin, setFailedLogin]=useState(""); 
+
   const submitThisSign= async ()=>{
     const info={email:email,passw:passw}; 
     await signUp(email, passw);
-  }
+  }  
   
   const submitThisLogin= async ()=>{
     const info={email:email,passw:passw}; 
-    let { data, error } = await signInWithEmail(email, passw);
-    if(getSession())
+    let { data, error } = await signInWithEmail(email, passw);    
+    if(await getSession())
     {
       window.location='/';
+    }
+    else{
+      setFailedLogin(true);
     }
   }
 
@@ -40,15 +45,17 @@ const Login = () => {
               <CardText>
                 <Form>
                   <FormGroup>
-                    <Label for="email">Email</Label>
-                    <Input type="email" name="email" id="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                    <Label for="email">Email</Label>                    
+                    {!failedLogin && <Input type="email" name="email" id="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>}
+                    {failedLogin && <Input type="email" name="email" id="email" value={email} onChange={(e)=>setEmail(e.target.value)} invalid/>}
                   </FormGroup>
                   <FormGroup>
-                    <Label for="password">Password</Label>
-                    <Input type="password" name="password" id="password" value={passw} onChange={(e)=>setPassw(e.target.value)}/>
+                    <Label for="password">Password</Label>                    
+                    {!failedLogin && <Input type="password" name="password" id="password" value={passw} onChange={(e)=>setPassw(e.target.value)} />}
+                    {failedLogin && <Input type="password" name="password" id="password" value={passw} onChange={(e)=>setPassw(e.target.value)} invalid/>}
+                    <FormFeedback>Invalid Credentials</FormFeedback>
                   </FormGroup>
                   <Button onClick={submitThisLogin}>Login</Button>
-                  <Button onClick={submitThisSign}>Sign Up</Button>
                 </Form>
               </CardText>
             </CardBody>
