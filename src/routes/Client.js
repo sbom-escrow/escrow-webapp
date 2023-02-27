@@ -5,7 +5,7 @@ import {
   Table, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button,
   Form, FormGroup, Label, Input} from 'reactstrap';
 import { Link} from 'react-router-dom';
-import { searchSboms, getSubscriptions, createSubscription } from '../infrastructure/supabaseClient';
+import { searchSboms, getClientSubscriptions, createSubscription } from '../infrastructure/supabaseClient';
 
 class Client extends Component {
   constructor(){
@@ -26,7 +26,7 @@ class Client extends Component {
     this.populateSboms();
   }
   async populateSboms(){
-    const sbomDtos = await getSubscriptions();
+    const sbomDtos = await getClientSubscriptions();
     this.setState((state, props) => {
       var sboms = [];
       if(sbomDtos)

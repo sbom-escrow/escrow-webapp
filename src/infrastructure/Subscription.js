@@ -1,5 +1,3 @@
-import shajs from 'sha.js';
-
 class Subscription {
 	vendor;
 	client;
@@ -12,4 +10,4 @@ class Subscription {
   	}
 }
 
-export default Sbom;
+export default Subscription;

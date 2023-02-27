@@ -111,7 +111,7 @@ async function searchSboms(searchTerm){
   return data;
 }
 
-async function getSubscriptions(){
+async function getClientSubscriptions(){
   const session = await getSession();
   const { data, error } = await supabase
     .from('client-sboms')  
@@ -124,6 +124,17 @@ async function getSubscriptions(){
   return sboms;
 }
 
+async function getVendorSubscriptions(sbom_id){
+  const session = await getSession();
+  const { data, error } = await supabase
+    .from('client-sboms')  
+    .select('sbom_id, vendor-sboms(*), vendors(name), cvss')
+    .eq('sbom_id',sbom_id)
+
+  return data;
+}
+
+
 async function createSubscription(sbom_id){
   const session = await getSession();
   const { data, error } = await supabase
@@ -135,4 +146,4 @@ async function createSubscription(sbom_id){
 }
 
 
-export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getMySbom, getVendorSbom, getSubscriptions, createSubscription };
+export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getMySbom, getVendorSbom, getClientSubscriptions, createSubscription, getVendorSubscriptions };
