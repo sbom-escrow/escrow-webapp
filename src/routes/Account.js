@@ -50,7 +50,7 @@ class Account extends Component {
         <Col sm="6">
           <Card>
             <CardBody>
-              <CardTitle className="h3 mb-2 pt-2 font-weight-bold text-secondary text-center">Login</CardTitle>
+              <CardTitle className="h3 mb-2 pt-2 font-weight-bold text-secondary text-center">Account</CardTitle>
               <CardText>
                 <Form>
                   <FormGroup>

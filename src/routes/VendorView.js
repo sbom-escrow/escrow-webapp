@@ -43,14 +43,17 @@ class VendorView extends Component {
     const sbomDtos = await getSboms();
     this.setState((state, props) => {
       var sboms = [];
-      for(var i = 0; i < sbomDtos.length;i++){
-        const sbomDto = sbomDtos[i];
-        sboms.push(new Sbom({
-          name : sbomDto.software_name,
-          sbomData : sbomDto.sbom,
-          vendor : sbomDto.vendor_id,
-          version: sbomDto.version
-        }))          
+      if(sbomDtos)
+      {
+        for(var i = 0; i < sbomDtos.length;i++){
+          const sbomDto = sbomDtos[i];
+          sboms.push(new Sbom({
+            name : sbomDto.software_name,
+            sbomData : sbomDto.sbom,
+            vendor : sbomDto.vendor_id,
+            version: sbomDto.version
+          }))          
+        }
       }
       return {sboms: sboms};
     });

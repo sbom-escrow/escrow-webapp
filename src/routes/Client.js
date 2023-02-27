@@ -85,6 +85,37 @@ class Client extends Component {
     const modal = this.state.modal;
     const searchTerm = this.state.searchTerm;
     const searchSboms = this.state.searchSboms;
+    let modalTable;
+
+    if(searchSboms.length > 0)
+    {
+      modalTable = <Table hover>
+              <thead>              
+                <th>Vendor</th>
+                <th>Software Name</th>
+                <th>Version</th>
+                <th></th>
+              </thead>
+              <tbody>
+                {searchSboms.map((sbom) => (
+                  <tr>
+                    <td>{sbom.vendor}</td>
+                    <td>{sbom.name}</td>
+                    <td>{sbom.version}</td>
+                    <td>
+                      <Button color="success" onClick={() =>{this.addSbom(sbom)}}>
+                        Subscribe
+                      </Button>
+                    </td>
+                  </tr>       
+                ))}
+              </tbody>          
+            </Table>
+    }
+    else{
+      modalTable = <Fragment><div style={{margin:'20px',textAlign:'center', fontSize: 'x-large'}}>No Results</div></Fragment>
+    }
+
     return (
 
       <Fragment>
@@ -124,29 +155,8 @@ class Client extends Component {
           <ModalBody>
             <div>
               <Input type="text" name="search" id="modal-search" placeholder="search..." value={searchTerm} onChange={(e)=>this.setSearchTerm(e.target.value)}/>
-            </div>
-            <Table hover>
-            <thead>              
-              <th>Vendor</th>
-              <th>Software Name</th>
-              <th>Version</th>
-              <th></th>
-            </thead>
-            <tbody>
-              {searchSboms.map((sbom) => (
-                <tr>
-                  <td>{sbom.vendor}</td>
-                  <td>{sbom.name}</td>
-                  <td>{sbom.version}</td>
-                  <td>
-                    <Button color="success" onClick={() =>{this.addSbom(sbom)}}>
-                      Subscribe
-                    </Button>
-                  </td>
-                </tr>       
-              ))}
-            </tbody>          
-          </Table>
+            </div>   
+            {modalTable}         
           </ModalBody>
         </Modal>
       </Fragment>
