@@ -24,4 +24,12 @@ async function signOut() {
   const { error } = await supabase.auth.signOut()
 }
 
-export { signOut, signUp, signInWithEmail };
+async function addToVendorToTable() {
+  const { data, error } = await supabase
+  .from('vendor-table')
+  .insert([
+    { vendor_id: 'TestVendor', software_name: 'TestSoftware' },
+  ])
+}
+
+export { signOut, signUp, signInWithEmail , addToVendorToTable };
