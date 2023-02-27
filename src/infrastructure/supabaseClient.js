@@ -51,6 +51,15 @@ async function getSboms(){
   return data;
 }
 
+async function getSbom(id){
+  const session = await getSession();
+  const { data, error } = await supabase
+    .from('vendor-sboms')  
+    .select()
+    .eq('id',id)
+  return data.length > 0 ? data[0] : null;
+}
+
 async function getVendorName(){
   const session = await getSession();
   if(!session)
@@ -94,4 +103,4 @@ async function searchSboms(searchTerm){
 }
 
 
-export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms };
+export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getSbom };

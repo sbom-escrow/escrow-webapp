@@ -51,7 +51,8 @@ class VendorView extends Component {
             name : sbomDto.software_name,
             sbomData : sbomDto.sbom,
             vendor : sbomDto.vendor_id,
-            version: sbomDto.version
+            version: sbomDto.version,
+            id: sbomDto.id
           }))          
         }
       }
@@ -109,9 +110,10 @@ class VendorView extends Component {
     const modalSbomJson = this.state.modalSbomJson;
     const vendorName = this.state.vendorName;
     return (
+      vendorName &&
       <Fragment>
         <div className="position-relative">                
-          <span className="d-block pb-4 h2 text-dark border-bottom border-gray">{vendorName}</span>          
+          <span className="d-block pb-4 h2 text-dark border-bottom border-gray">{vendorName}'s Software Components</span>          
           <Table hover>
             <thead>
               <th>Software Component Name</th>
@@ -122,7 +124,7 @@ class VendorView extends Component {
               {sboms.map((sbom) => (
                 <tr>
                   <td>
-                    <Link to={'sbom/' + sbom.name + '/' + sbom.version}>{sbom.name}</Link>
+                    <Link to={'sbom/' + sbom.id}>{sbom.name}</Link>
                   </td>
                   <td>{sbom.version}</td>
                   <td>{sbom.sourceSha}</td>

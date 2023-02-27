@@ -6,6 +6,7 @@ class Sbom {
 	version;
 	vendor;
 	sbomData;
+	id;
 
 	constructor(data) {
 	    this.name = data.name;
@@ -13,6 +14,7 @@ class Sbom {
 	    this.version = data.version;
 	    this.vendor = data.vendor;
 	    this.sbomData = data.sbomData;
+	    this.id = data.id;
   	}
 }
 

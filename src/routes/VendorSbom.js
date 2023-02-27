@@ -1,13 +1,34 @@
-import React, {Fragment} from 'react';
+import React, {Fragment,useState,useEffect} from 'react';
 import SbomView from '../components/SbomView';
 import { Link, useParams } from 'react-router-dom';
 import { Table } from 'reactstrap';
+import { getSbom, getVendorName } from '../infrastructure/supabaseClient';
+import Sbom from '../infrastructure/Sbom';
 
 const VendorSbom = () => {
-  const { name, version } = useParams();
-  return(
+  const { id } = useParams();
+
+  const [sbom, updateSbom] = useState()
+
+  useEffect(() => {
+    const retrieveSbom = async () => {
+      const sbomDto = await getSbom(id);
+      const vendor = await getVendorName();
+      if(sbomDto)
+        updateSbom(new Sbom({
+          name : sbomDto.software_name,
+          sbomData : sbomDto.sbom,
+          vendor : vendor,
+          version: sbomDto.version,
+          id: sbomDto.id
+      }));
+    }
+    retrieveSbom();
+  }, []);
+
+  return(sbom &&
     <Fragment>
-      <SbomView name={name} version={version} vendor='My Company'/>    
+      <SbomView name={sbom.name} version={sbom.version} vendor={sbom.vendor}/>    
       <div>
 
         <h4 style={{marginTop:'20px'}}>Subscriptions</h4>   
