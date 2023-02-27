@@ -2,7 +2,7 @@ import React, {Fragment,useState,useEffect} from 'react';
 import SbomView from '../components/SbomView';
 import { Link, useParams } from 'react-router-dom';
 import { Table } from 'reactstrap';
-import { getSbom, getVendorName } from '../infrastructure/supabaseClient';
+import { getMySbom, getVendorName } from '../infrastructure/supabaseClient';
 import Sbom from '../infrastructure/Sbom';
 
 const VendorSbom = () => {
@@ -12,7 +12,7 @@ const VendorSbom = () => {
 
   useEffect(() => {
     const retrieveSbom = async () => {
-      const sbomDto = await getSbom(id);
+      const sbomDto = await getMySbom(id);
       const vendor = await getVendorName();
       if(sbomDto)
         updateSbom(new Sbom({

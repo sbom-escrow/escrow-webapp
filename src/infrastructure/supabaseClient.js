@@ -51,12 +51,21 @@ async function getSboms(){
   return data;
 }
 
-async function getSbom(id){
+async function getMySbom(id){
   const session = await getSession();
   const { data, error } = await supabase
     .from('vendor-sboms')  
     .select()
     .eq('id',id)
+  return data.length > 0 ? data[0] : null;
+}
+
+async function getVendorSbom(id){
+  const session = await getSession();
+  const { data, error } = await supabase
+    .from('sboms')  
+    .select()
+    .eq('sbom_id',id)
   return data.length > 0 ? data[0] : null;
 }
 
@@ -102,5 +111,28 @@ async function searchSboms(searchTerm){
   return data;
 }
 
+async function getSubscriptions(){
+  const session = await getSession();
+  const { data, error } = await supabase
+    .from('client-sboms')  
+    .select()
+    .eq('client_id',session.user.id)
+  let sboms = [];
+  for(var i =0; i< data.length; i++){
+    sboms.push(await getVendorSbom(data[i].sbom_id))
+  }
+  return sboms;
+}
 
-export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getSbom };
+async function createSubscription(sbom_id){
+  const session = await getSession();
+  const { data, error } = await supabase
+    .from('client-sboms')  
+    .insert([
+      { client_id: session.user.id, sbom_id: sbom_id }
+    ])
+  return data;
+}
+
+
+export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getMySbom, getVendorSbom, getSubscriptions, createSubscription };

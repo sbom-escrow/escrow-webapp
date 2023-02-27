@@ -5,7 +5,7 @@ import {
   Table, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button,
   Form, FormGroup, Label, Input} from 'reactstrap';
 import { Link} from 'react-router-dom';
-import { searchSboms } from '../infrastructure/supabaseClient';
+import { searchSboms, getSubscriptions, createSubscription } from '../infrastructure/supabaseClient';
 
 class Client extends Component {
   constructor(){
@@ -14,27 +14,35 @@ class Client extends Component {
       searchTerm:null,
       modal : false,
       searchSboms:[],
-      sboms:[
-        new Sbom({
-          name : 'UpstreamLibrary',
-          version : '1.0',
-          vendor : 'Other Big Company'
-        }),
-        new Sbom({
-          name : 'TestingSuite',
-          version : '1.0.3.2',
-          vendor : 'Other Big Company'
-        }),
-        new Sbom({
-          name : 'CryptoPlugin',
-          version : '.01b',
-          vendor : 'Open Source Foundation'
-        })
-      ]      
+      sboms:null      
     }
 
     this.toggleModal = this.toggleModal.bind(this);
     this.setSearchTerm = this.setSearchTerm.bind(this);
+    this.populateSboms = this.populateSboms.bind(this);
+  }
+
+  componentDidMount() {
+    this.populateSboms();
+  }
+  async populateSboms(){
+    const sbomDtos = await getSubscriptions();
+    this.setState((state, props) => {
+      var sboms = [];
+      if(sbomDtos)
+      {
+        for(var i = 0; i < sbomDtos.length;i++){
+          const sbomDto = sbomDtos[i];
+          sboms.push(new Sbom({
+            name : sbomDto.software_name,
+            vendor : sbomDto.vendor_name,
+            version: sbomDto.software_version,
+            id: sbomDto.sbom_id
+          }))          
+        }
+      }
+      return {sboms: sboms};
+    });
   }
 
   async setSearchTerm(searchTerm){
@@ -50,7 +58,8 @@ class Client extends Component {
           sboms.push(new Sbom({
             name : sbomDto.software_name,
             vendor : sbomDto.vendor_name,
-            version: sbomDto.software_version
+            version: sbomDto.software_version,
+            id: sbomDto.sbom_id
           }))          
         }
       }
@@ -58,26 +67,16 @@ class Client extends Component {
     });
   }
 
-  addSbom(sbom){
-    this.setState((state, props) => {
-      if(!sbom)
-        return {};
-      let newSboms = [...state.sboms]
-      newSboms.push(sbom)
-      
-      return {
-        sboms: newSboms
-      };
-    });
+  async addSbom(sbom){
+    await createSubscription(sbom.id);
+    await this.populateSboms();
   }
 
   toggleModal() {
     this.setState((state, props) => {
       return {modal: !state.modal};
     });
-  }
-
-  search
+  }  
 
 
   render() {
@@ -116,7 +115,7 @@ class Client extends Component {
       modalTable = <Fragment><div style={{margin:'20px',textAlign:'center', fontSize: 'x-large'}}>No Results</div></Fragment>
     }
 
-    return (
+    return (sboms &&
 
       <Fragment>
         <div className="position-relative">                
@@ -133,7 +132,7 @@ class Client extends Component {
                 <tr>
                   <td>{sbom.vendor}</td>
                   <td>
-                    <Link to={sbom.vendor + '/' + 'sbom/' + sbom.name + '/' + sbom.version}>{sbom.name}</Link>
+                    <Link to={sbom.vendor + '/' + 'sbom/' + sbom.id}>{sbom.name}</Link>
                   </td>
                   <td>{sbom.version}</td>
                   <td>{sbom.sourceSha}</td>

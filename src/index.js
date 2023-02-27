@@ -78,7 +78,7 @@ const router = createBrowserRouter([
     loader: authLoader
   },
   {
-      path: "/client/:vendor/sbom/:name/:version",
+      path: "/client/:vendor/sbom/:id",
       element: <ClientSbom />,
       loader:authLoader
   }
