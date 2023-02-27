@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import Identity from '../infrastructure/Identity';
+import React, { Fragment, useEffect, useState} from 'react';
+import { signOut, getSession } from '../infrastructure/supabaseClient';
 
 import {
   Button
@@ -7,14 +7,22 @@ import {
 
 
 const IdentityBar = () => {
-	const identity = new Identity();
 
-	const logout=()=>{
-    identity.Logout();
+	const [session, updateSession] = useState()
+
+  useEffect(() => {
+    const syncSession = async () => {
+      updateSession(await getSession());
+    }
+    syncSession();
+  }, []);
+
+	const logout= async ()=>{
+    await signOut();
     window.location="/login"
   }
 
-	if (identity.GetToken())
+	if (session)
 	{
 		return(
 	    <Fragment>

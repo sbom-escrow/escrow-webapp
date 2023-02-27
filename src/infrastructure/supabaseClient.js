@@ -13,11 +13,20 @@ async function signInWithEmail(emailStr, passwStr) {
 }
 
 async function signUp(emailStr, passwStr) {
-    const { data, error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: emailStr,
     password: passwStr
   })
   return { data, error };
+}
+
+async function getSession() {
+  const { data, error } = await supabase.auth.getSession()
+  if(data.session)
+  {
+    return data
+  }
+  return null;  
 }
 
 async function signOut() {
@@ -32,4 +41,4 @@ async function addToVendorToTable() {
   ])
 }
 
-export { signOut, signUp, signInWithEmail , addToVendorToTable };
+export { signOut, signUp, signInWithEmail , addToVendorToTable, getSession };

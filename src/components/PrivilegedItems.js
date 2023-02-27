@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import Identity from '../infrastructure/Identity';
+import React, { Fragment, useState, useEffect } from 'react';
+import { getSession } from '../infrastructure/supabaseClient';
 import { Link } from "react-router-dom";
 
 import {
@@ -9,9 +9,17 @@ import {
 } from 'reactstrap';
 
 const PrivilegedItems = () => {
-	const identity = new Identity();
 
-	if (identity.GetToken())
+  const [session, updateSession] = useState()
+
+  useEffect(() => {
+    const syncSession = async () => {
+      updateSession(await getSession());
+    }
+    syncSession();
+  }, []);
+
+	if (session)
 	{
 		return(
 	    <Nav className="mrx-auto" navbar>

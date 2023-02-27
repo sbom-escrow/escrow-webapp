@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import Identity from '../infrastructure/Identity';
-import { signInWithEmail, signUp } from '../infrastructure/supabaseClient';
+import { signInWithEmail, signUp, getSession} from '../infrastructure/supabaseClient';
 
 import {
   Button, UncontrolledAlert, Card, CardImg, CardBody,
@@ -23,11 +22,9 @@ const Login = () => {
   
   const submitThisLogin= async ()=>{
     const info={email:email,passw:passw}; 
-    var identity = new Identity();
     let { data, error } = await signInWithEmail(email, passw);
-    if(data.session !== null)
+    if(getSession())
     {
-      identity.Login(data);
       window.location='/';
     }
   }
