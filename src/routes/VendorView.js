@@ -5,6 +5,7 @@ import {
   Table, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button,
   Form, FormGroup, Label, Input} from 'reactstrap';
 import { Link} from 'react-router-dom';
+import { addToVendorToTable } from '../infrastructure/supabaseClient';
 
 class VendorView extends Component {
   constructor(){
@@ -74,6 +75,9 @@ class VendorView extends Component {
           version : state.modalVersion,
           vendor : 'My Company'
         }))
+      
+      //Test for update to backend going here
+      addToVendorToTable();
       
       return {
         sboms: newSbom,
