@@ -51,4 +51,39 @@ async function getSboms(){
   return data;
 }
 
-export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms };
+async function getVendorName(){
+  const session = await getSession();
+  if(!session)
+    return null
+  const { data, error } = await supabase
+    .from('vendors')  
+    .select()
+    .eq('id',session.user.id)
+  if(data.length > 0)
+    return data[0].name;
+  return session.user.email + "'s Company";
+}
+
+async function setVendorName(name){
+  const session = await getSession();
+  const { data, error } = await supabase
+    .from('vendors')  
+    .select()
+    .eq('id',session.user.id)
+  if(data.length > 0)
+  {
+    const { idata, ierror } = await supabase
+      .from('vendors')
+      .update([
+        { id: session.user.id, name: name }
+      ])
+  }
+  const { idata, ierror } = await supabase
+      .from('vendors')
+      .insert([
+        { id: session.user.id, name: name }
+      ])
+}
+
+
+export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName };

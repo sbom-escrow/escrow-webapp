@@ -18,6 +18,7 @@ import VendorView from './routes/VendorView';
 import Client from './routes/Client';
 import VendorSbom from './routes/VendorSbom';
 import ClientSbom from './routes/ClientSbom';
+import Account from './routes/Account';
 import reportWebVitals from './reportWebVitals';
 import Cookies from 'universal-cookie';
 import { getSession } from './infrastructure/supabaseClient';
@@ -58,6 +59,11 @@ const router = createBrowserRouter([
   {
     path: "/vendor",
     element: <VendorView />,
+    loader:authLoader
+  },
+  {
+    path: "/account",
+    element: <Account />,
     loader:authLoader
   },
   {

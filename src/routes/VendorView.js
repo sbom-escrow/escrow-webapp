@@ -5,7 +5,7 @@ import {
   Table, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button,
   Form, FormGroup, Label, Input} from 'reactstrap';
 import { Link} from 'react-router-dom';
-import { uploadSbom, getSboms } from '../infrastructure/supabaseClient';
+import { uploadSbom, getSboms, getVendorName } from '../infrastructure/supabaseClient';
 
 class VendorView extends Component {
   constructor(){
@@ -15,7 +15,8 @@ class VendorView extends Component {
       modal:false,
       modalName:null,
       modalVersion:null,
-      modalSbomJson:null
+      modalSbomJson:null,
+      vendorName: "My Company"
     }
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -24,10 +25,18 @@ class VendorView extends Component {
     this.setModalVersion = this.setModalVersion.bind(this);
     this.setModalSbomJson = this.setModalSbomJson.bind(this);
     this.populateSboms = this.populateSboms.bind(this);
+    this.populateVendorName = this.populateVendorName.bind(this);
   }
 
   componentDidMount() {
     this.populateSboms();
+    this.populateVendorName();
+  }
+  async populateVendorName(){
+    const vendorName = await getVendorName();
+    this.setState((state, props) => {
+      return {vendorName: vendorName};
+    });
   }
 
   async populateSboms(){
@@ -95,10 +104,11 @@ class VendorView extends Component {
     const modalName = this.state.modalName;
     const modalVersion = this.state.modalVersion;
     const modalSbomJson = this.state.modalSbomJson;
+    const vendorName = this.state.vendorName;
     return (
       <Fragment>
         <div className="position-relative">                
-          <span className="d-block pb-4 h2 text-dark border-bottom border-gray">My Company</span>          
+          <span className="d-block pb-4 h2 text-dark border-bottom border-gray">{vendorName}</span>          
           <Table hover>
             <thead>
               <th>Software Component Name</th>

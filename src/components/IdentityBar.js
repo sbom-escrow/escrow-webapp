@@ -22,10 +22,15 @@ const IdentityBar = () => {
     window.location="/login"
   }
 
+  const account= async ()=>{
+    window.location="/account"
+  }
+
 	if (session)
 	{
 		return(
 	    <Fragment>
+	    	<Button onClick={account} style={{marginRight:'5px'}}>Account</Button>
 				<Button onClick={logout}>Logout</Button>
 			</Fragment>
 		);
