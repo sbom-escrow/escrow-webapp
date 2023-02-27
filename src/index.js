@@ -13,6 +13,7 @@ import { Container, Row, Col } from 'reactstrap';
 import './index.css';
 import Header from './components/Header';
 import Login from './routes/Login';
+import SignUp from './routes/SignUp';
 import Root from './routes/Root';
 import VendorView from './routes/VendorView';
 import Client from './routes/Client';
@@ -47,8 +48,8 @@ const router = createBrowserRouter([
     loader: notAuthedLoader
   },
   {
-    path: "/login",
-    element: <Login />,
+    path: "/signup",
+    element: <SignUp />,
     loader: notAuthedLoader
   },
   {

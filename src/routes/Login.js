@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { signInWithEmail, signUp, getSession} from '../infrastructure/supabaseClient';
+import { Link} from 'react-router-dom';
 
 import {
   Button, UncontrolledAlert, Card, CardImg, CardBody,
@@ -56,6 +57,7 @@ const Login = () => {
                     <FormFeedback>Invalid Credentials</FormFeedback>
                   </FormGroup>
                   <Button onClick={submitThisLogin}>Login</Button>
+                  <Link to={'/signup' }><Button style={{marginLeft:'5px'}}>Register</Button></Link>                  
                 </Form>
               </CardText>
             </CardBody>
