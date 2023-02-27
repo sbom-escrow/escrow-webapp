@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
+import bigLogo from '../Escrow Crow-2.png';
 import { Badge } from 'reactstrap';
 
 class Root extends Component {
@@ -7,12 +8,8 @@ class Root extends Component {
   render() {
     return (
       <Fragment>
-        <div className="position-relative">                
-          <span className="d-block pb-4 h2 text-dark border-bottom border-gray">Escrow</span>          
-          <article className="pt-5 text-secondary text-justify" style={{ fontSize: '0.9rem', whiteSpace: 'pre-line' }}>
-            Stuff Goes Here
-          </article>
-          
+        <div className="position-relative" style={{height:'130px',overflow:'hidden'}}>                
+          <img style={{marginTop:'-188px'}} src={bigLogo} alt="BigLogo" className="position-relative img-fluid" />          
         </div>
       </Fragment>
     );

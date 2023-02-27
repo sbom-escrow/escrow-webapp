@@ -18,18 +18,17 @@ const Header = () => {
     
       <Container>
         <Row noGutters className="position-relative w-100 align-items-center">
-        
-          <Col className="d-none d-lg-flex justify-content-start">
-            <PrivilegedItems/>
-          </Col>
-          
-          <Col className="d-flex justify-content-xs-start justify-content-lg-center">
+          <Col className="d-flex justify-content-xs-start" xs={1}>
             <NavbarBrand className="d-inline-block p-0" href="/" style={{ width: 80, margin: '0px 0px 2px 0px'}}>
               <img src={logo} alt="logo" className="position-relative img-fluid" />
             </NavbarBrand>
           </Col>
+
+          <Col xs={9} className="d-inline-block justify-content-start">
+            <PrivilegedItems/>
+          </Col>
           
-          <Col className="d-none d-lg-flex justify-content-end">
+          <Col xs={2} className="d-inline-block justify-content-end">
             <IdentityBar/>
           </Col>
           
