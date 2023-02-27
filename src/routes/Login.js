@@ -16,18 +16,20 @@ const Login = () => {
   const[passw,setPassw]=useState("");
   const[dataInput, setDataInput]=useState(""); 
   
-  const submitThisSign=()=>{
+  const submitThisSign= async ()=>{
     const info={email:email,passw:passw}; 
-    signUp(email, passw);
+    await signUp(email, passw);
   }
   
-  const submitThisLogin=()=>{
+  const submitThisLogin= async ()=>{
     const info={email:email,passw:passw}; 
     var identity = new Identity();
-    let { data, error } = signInWithEmail(email, passw);
-    //console.log(data.user);
-    identity.Login();
-    window.location='/';
+    let { data, error } = await signInWithEmail(email, passw);
+    if(data.session !== null)
+    {
+      identity.Login(data);
+      window.location='/';
+    }
   }
 
   return(
@@ -37,7 +39,7 @@ const Login = () => {
         <Col sm="6">
           <Card>
             <CardBody>
-              <CardTitle className="h3 mb-2 pt-2 font-weight-bold text-secondary text-center">Login (Test To See If Deploy Action Works)</CardTitle>
+              <CardTitle className="h3 mb-2 pt-2 font-weight-bold text-secondary text-center">Login</CardTitle>
               <CardText>
                 <Form>
                   <FormGroup>

@@ -1,4 +1,5 @@
 import Cookies from 'universal-cookie';
+import { signOut } from './supabaseClient';
 
 class Identity {
 	constructor() {
@@ -9,11 +10,12 @@ class Identity {
 		return this.cookies.get('token');
 	}
 
-	Login = () => {
-    	this.cookies.set('token', 'token', { path: '/' });
+	Login = (data) => {
+    	this.cookies.set('token', data, { path: '/' });
 	}
 
 	Logout = () => {
+		signOut();
     	this.cookies.remove('token', { path: '/' });
 	}
 }

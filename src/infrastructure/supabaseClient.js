@@ -6,17 +6,17 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function signInWithEmail(emailStr, passwStr) {
   const { data, error } = await supabase.auth.signInWithPassword({
-  email: emailStr,
-  password: passwStr
-})
+    email: emailStr,
+    password: passwStr
+  })
   return { data, error };
 }
 
 async function signUp(emailStr, passwStr) {
-  const { data, error } = await supabase.auth.signUp({
-  email: emailStr,
-  password: passwStr
-})
+    const { data, error } = await supabase.auth.signUp({
+    email: emailStr,
+    password: passwStr
+  })
   return { data, error };
 }
 
