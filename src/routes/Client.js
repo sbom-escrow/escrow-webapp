@@ -38,16 +38,21 @@ class Client extends Component {
   }
 
   async setSearchTerm(searchTerm){
+    if(!searchTerm)
+      searchTerm = ""
     const sbomDtos = await searchSboms(searchTerm);
     this.setState((state, props) => {
       var sboms = [];
-      for(var i = 0; i < sbomDtos.length;i++){
-        const sbomDto = sbomDtos[i];
-        sboms.push(new Sbom({
-          name : sbomDto.software_name,
-          vendor : sbomDto.vendor_name,
-          version: sbomDto.software_version
-        }))          
+      if(sbomDtos)
+      {
+        for(var i = 0; i < sbomDtos.length;i++){
+          const sbomDto = sbomDtos[i];
+          sboms.push(new Sbom({
+            name : sbomDto.software_name,
+            vendor : sbomDto.vendor_name,
+            version: sbomDto.software_version
+          }))          
+        }
       }
       return {searchSboms: sboms};
     });
