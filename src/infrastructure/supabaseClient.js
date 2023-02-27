@@ -36,7 +36,7 @@ async function signOut() {
 async function uploadSbom(sbom) {
   const session = await getSession();
   const { data, error } = await supabase
-    .from('vendor-table')
+    .from('vendor-sboms')
     .insert([
       { vendor_id: session.user.id, software_name: sbom.name, sbom:sbom.sbomData, version:sbom.version }
     ])
@@ -45,7 +45,7 @@ async function uploadSbom(sbom) {
 async function getSboms(){
   const session = await getSession();
   const { data, error } = await supabase
-    .from('vendor-table')  
+    .from('vendor-sboms')  
     .select()
     .eq('vendor_id',session.user.id)
   return data;
