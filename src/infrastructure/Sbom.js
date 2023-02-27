@@ -5,12 +5,14 @@ class Sbom {
 	sourceSha;
 	version;
 	vendor;
+	sbomData;
 
 	constructor(data) {
 	    this.name = data.name;
 	    this.sourceSha = shajs('sha256').update(data.name + ':' + data.version).digest('hex');
 	    this.version = data.version;
 	    this.vendor = data.vendor;
+	    this.sbomData = data.sbomData;
   	}
 }
 

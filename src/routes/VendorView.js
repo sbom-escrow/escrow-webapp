@@ -5,40 +5,46 @@ import {
   Table, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button,
   Form, FormGroup, Label, Input} from 'reactstrap';
 import { Link} from 'react-router-dom';
-import { addToVendorToTable } from '../infrastructure/supabaseClient';
+import { uploadSbom, getSboms } from '../infrastructure/supabaseClient';
 
 class VendorView extends Component {
   constructor(){
     super();
     this.state = { 
-      sboms:[
-        new Sbom({
-          name : 'Test1',
-          version : '1.0',
-          vendor : 'My Company'
-        }),
-        new Sbom({
-          name : 'Test2',
-          version : '1.0.3.2',
-          vendor : 'My Company'
-        }),
-        new Sbom({
-          name : 'Test3',
-          version : '.01b',
-          vendor : 'My Company'
-        })
-      ],
+      sboms:[],
       modal:false,
       modalName:null,
       modalVersion:null,
-      modalFile:null
+      modalSbomJson:null
     }
 
     this.toggleModal = this.toggleModal.bind(this);
     this.uploadModal = this.uploadModal.bind(this);
     this.setModalName = this.setModalName.bind(this);
     this.setModalVersion = this.setModalVersion.bind(this);
-    this.setModalFile = this.setModalFile.bind(this);
+    this.setModalSbomJson = this.setModalSbomJson.bind(this);
+    this.populateSboms = this.populateSboms.bind(this);
+  }
+
+  componentDidMount() {
+    this.populateSboms();
+  }
+
+  async populateSboms(){
+    const sbomDtos = await getSboms();
+    this.setState((state, props) => {
+      var sboms = [];
+      for(var i = 0; i < sbomDtos.length;i++){
+        const sbomDto = sbomDtos[i];
+        sboms.push(new Sbom({
+          name : sbomDto.software_name,
+          sbomData : sbomDto.sbom,
+          vendor : sbomDto.vendor_id,
+          version: sbomDto.version
+        }))          
+      }
+      return {sboms: sboms};
+    });
   }
 
   setModalName(name){
@@ -53,9 +59,9 @@ class VendorView extends Component {
     });
   }
 
-  setModalFile(file){
+  setModalSbomJson(sbomJson){
     this.setState((state, props) => {
-      return {modalFile: file};
+      return {modalSbomJson: sbomJson};
     });
   }
 
@@ -65,26 +71,20 @@ class VendorView extends Component {
     });
   }
 
-  uploadModal() {
-    this.setState((state, props) => {
-      if(!state.modalName || !state.modalVersion)
-        return {};
-      let newSbom = [...state.sboms]
-      newSbom.push(new Sbom({
-          name : state.modalName,
-          version : state.modalVersion,
-          vendor : 'My Company'
-        }))
-      
-      //Test for update to backend going here
-      addToVendorToTable();
-      
+  async uploadModal() {
+    console.log(this.state.modalSbomJson)
+    await uploadSbom(new Sbom({
+      name : this.state.modalName,
+      version : this.state.modalVersion,
+      sbomData: this.state.modalSbomJson
+    }))
+    await this.populateSboms()
+    this.setState((state, props) => {            
       return {
-        sboms: newSbom,
         modal:false,
         modalName:null,
         modalVersion:null,
-        modalFile:null
+        modalSbomJson:null
       };
     });
   }
@@ -94,7 +94,7 @@ class VendorView extends Component {
     const modal = this.state.modal;
     const modalName = this.state.modalName;
     const modalVersion = this.state.modalVersion;
-    const modalFile = this.state.modalFile;
+    const modalSbomJson = this.state.modalSbomJson;
     return (
       <Fragment>
         <div className="position-relative">                
@@ -138,8 +138,8 @@ class VendorView extends Component {
                     <Input type="text" name="modal-version" id="modal-version" value={modalVersion} onChange={(e)=>this.setModalVersion(e.target.value)}/>
                   </FormGroup>
                   <FormGroup>
-                    <Label for="modal-source">Source Code</Label>
-                    <Input type="file" name="modal-source" id="modal-source" value={modalFile} onChange={(e)=>this.setModalFile(e.target.value)}/>
+                    <Label for="modal-source">SBOM JSON</Label>
+                    <Input type="textarea" name="modal-source" id="modal-source" value={modalSbomJson} onChange={(e)=>this.setModalSbomJson(e.target.value)}/>
                   </FormGroup>
                   <Button onClick={this.uploadModal}>Upload</Button>
                 </Form>

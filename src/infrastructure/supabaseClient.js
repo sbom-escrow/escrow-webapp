@@ -24,7 +24,7 @@ async function getSession() {
   const { data, error } = await supabase.auth.getSession()
   if(data.session)
   {
-    return data
+    return data.session
   }
   return null;  
 }
@@ -33,12 +33,22 @@ async function signOut() {
   const { error } = await supabase.auth.signOut()
 }
 
-async function addToVendorToTable() {
+async function uploadSbom(sbom) {
+  const session = await getSession();
   const { data, error } = await supabase
-  .from('vendor-table')
-  .insert([
-    { vendor_id: 'TestVendor', software_name: 'TestSoftware' },
-  ])
+    .from('vendor-table')
+    .insert([
+      { vendor_id: session.user.id, software_name: sbom.name, sbom:sbom.sbomData, version:sbom.version }
+    ])
 }
 
-export { signOut, signUp, signInWithEmail , addToVendorToTable, getSession };
+async function getSboms(){
+  const session = await getSession();
+  const { data, error } = await supabase
+    .from('vendor-table')  
+    .select()
+    .eq('vendor_id',session.user.id)
+  return data;
+}
+
+export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms };
