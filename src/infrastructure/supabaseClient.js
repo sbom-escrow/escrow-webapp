@@ -142,6 +142,12 @@ async function createSubscription(sbom_id){
     .insert([
       { client_id: session.user.id, sbom_id: sbom_id }
     ])
+  
+  //TODO Jacob can you help me make this work I think it should go here
+  //const { data2, error2 } = await supabase.functions.invoke('populate-client-info', {
+  //body: { client_id: session.user.id, vendor_id: 'GetFromVendorSbomTable', CVSS_Threshold: 'GetFromUI', software_name: 'GetFromVendorSbomTable', spdx: 'GetFromVendorSbomTable' },
+  //})
+  
   return data;
 }
 
