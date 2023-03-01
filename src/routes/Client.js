@@ -126,6 +126,7 @@ class Client extends Component {
               <th>Software Component Name</th>
               <th>Version</th>
               <th>SHA</th>
+              <th>Safe?</th>
             </thead>
             <tbody>
               {sboms.map((sbom) => (
@@ -136,6 +137,7 @@ class Client extends Component {
                   </td>
                   <td>{sbom.version}</td>
                   <td>{sbom.sourceSha}</td>
+                  <td><i class="bi bi-check-circle-fill" style={{color:'green'}}></i></td>
                 </tr>       
               ))}
             </tbody>          
