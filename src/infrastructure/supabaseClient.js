@@ -42,6 +42,14 @@ async function uploadSbom(sbom) {
     ])
 }
 
+async function updateSbom(sbom_id,version,sbom) {
+  const session = await getSession();
+  const { data, error } = await supabase
+    .from('vendor-sboms')
+    .update({ sbom:sbom, version:version })
+    .eq('id',sbom_id)
+}
+
 async function getSboms(){
   const session = await getSession();
   const { data, error } = await supabase
@@ -187,4 +195,4 @@ async function setSubscriptionApproval(vendor_id, client_id, sbom_id, approved){
 }
 
 
-export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getMySbom, getVendorSbom, getClientSubscriptions, createSubscription, getVendorSubscriptions,getSubscriptionApproved,setSubscriptionApproval };
+export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getMySbom, getVendorSbom, getClientSubscriptions, createSubscription, getVendorSubscriptions,getSubscriptionApproved,setSubscriptionApproval, updateSbom };

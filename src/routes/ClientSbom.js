@@ -23,7 +23,7 @@ const ClientSbom = () => {
     }
     retrieveSbom();
   }, []);
-  return(sbom && <SbomView name={sbom.name} version={sbom.version} vendor={sbom.vendor}/>)
+  return(sbom && <SbomView sbom={sbom}/>)
 }
 
 export default ClientSbom;

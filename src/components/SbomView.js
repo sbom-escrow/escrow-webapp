@@ -8,9 +8,9 @@ class SbomView extends Component {
     super(props);
     this.state = { 
       sbom: new Sbom({
-        name : props.name,
-        version : props.version,
-        vendor : props.vendor
+        name : props.sbom.name,
+        version : props.sbom.version,
+        vendor : props.sbom.vendor
       })
     }
   }
