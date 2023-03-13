@@ -5,6 +5,7 @@ class Sbom {
 	sourceSha;
 	version;
 	vendor;
+	vendor_id;
 	sbomData;
 	id;
 
@@ -15,6 +16,7 @@ class Sbom {
 	    this.vendor = data.vendor;
 	    this.sbomData = data.sbomData;
 	    this.id = data.id;
+	    this.vendor_id = data.vendor_id;
   	}
 }
 

@@ -128,7 +128,7 @@ async function getVendorSubscriptions(sbom_id){
   const session = await getSession();
   const { data, error } = await supabase
     .from('client-sboms')  
-    .select('sbom_id, vendor-sboms(*), vendors(name), cvss')
+    .select('client_id, sbom_id, vendor-sboms(*), vendors(name), cvss')
     .eq('sbom_id',sbom_id)
 
   return data;
@@ -151,5 +151,40 @@ async function createSubscription(sbom_id){
   return data;
 }
 
+async function getSubscriptionApproved(vendor_id, client_id, sbom_id){
+  const { data, error } = await supabase
+    .from('client-sboms-approval')  
+    .select()
+    .eq('client_id',client_id)
+    .eq('sbom_id',sbom_id)
+    .eq('vendor_id',vendor_id)
+  console.log(data)
+  if(!data || data.length == 0)
+    return false;  
+  return data[0].allowed;
+}
 
-export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getMySbom, getVendorSbom, getClientSubscriptions, createSubscription, getVendorSubscriptions };
+async function setSubscriptionApproval(vendor_id, client_id, sbom_id, approved){
+  const { data, error } = await supabase
+    .from('client-sboms-approval')  
+    .select()
+    .eq('client_id',client_id)
+    .eq('sbom_id',sbom_id)
+    .eq('vendor_id',vendor_id)
+  if(!data || data.length == 0){
+    const { data, error } = await supabase
+      .from('client-sboms-approval')  
+      .insert({ vendor_id: vendor_id, client_id: client_id, sbom_id:sbom_id, allowed:approved })
+  }
+  else{
+    const { data, error } = await supabase
+      .from('client-sboms-approval')  
+      .update({ allowed:approved })
+      .eq('client_id',client_id)
+      .eq('sbom_id',sbom_id)
+      .eq('vendor_id',vendor_id) 
+  }      
+}
+
+
+export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getMySbom, getVendorSbom, getClientSubscriptions, createSubscription, getVendorSubscriptions,getSubscriptionApproved,setSubscriptionApproval };

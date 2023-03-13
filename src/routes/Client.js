@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import Sbom from '../infrastructure/Sbom';
+import Subscription from '../infrastructure/Subscription';
 import { 
   Table, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button,
   Form, FormGroup, Label, Input} from 'reactstrap';
 import { Link} from 'react-router-dom';
-import { searchSboms, getClientSubscriptions, createSubscription } from '../infrastructure/supabaseClient';
+import { searchSboms, getClientSubscriptions, createSubscription, getSubscriptionApproved, getSession } from '../infrastructure/supabaseClient';
 
 class Client extends Component {
   constructor(){
@@ -27,20 +28,26 @@ class Client extends Component {
   }
   async populateSboms(){
     const sbomDtos = await getClientSubscriptions();
-    this.setState((state, props) => {
-      var sboms = [];
-      if(sbomDtos)
-      {
-        for(var i = 0; i < sbomDtos.length;i++){
-          const sbomDto = sbomDtos[i];
-          sboms.push(new Sbom({
-            name : sbomDto.software_name,
-            vendor : sbomDto.vendor_name,
-            version: sbomDto.software_version,
-            id: sbomDto.sbom_id
-          }))          
-        }
+    let session = await getSession()
+    var sboms = [];
+    if(sbomDtos)
+    {
+      for(var i = 0; i < sbomDtos.length;i++){
+        const sbomDto = sbomDtos[i];
+        const approved = await getSubscriptionApproved(sbomDto.vendor_id,session.user.id,sbomDto.sbom_id);
+        console.log(approved)
+        sboms.push(new Subscription({
+          sbom : sbomDto.software_name,
+          vendor : sbomDto.vendor_name,
+          version: sbomDto.software_version,
+          vendor_id : sbomDto.vendor_id,
+          client_id : session.user.id,
+          sbom_id: sbomDto.sbom_id,
+          approved: approved
+        }))          
       }
+    }
+    this.setState((state, props) => {      
       return {sboms: sboms};
     });
   }
@@ -125,21 +132,31 @@ class Client extends Component {
               <th>Vendor</th>
               <th>Software Component Name</th>
               <th>Version</th>
-              <th>SHA</th>
+              <th>Approved?</th>
               <th>Safe?</th>
             </thead>
             <tbody>
-              {sboms.map((sbom) => (
+              {sboms.map((sbom) => {
+                const safe = true;
+                const approvedColor = sbom.approved ? "green" : "red";
+                const approvedSymbol = sbom.approved ? "bi bi-check-circle-fill" : "bi bi-x-circle-fill";
+                let safeColor = safe ? "green" : "red";
+                let safeSymbol = safe ? "bi bi-check-circle-fill" : "bi bi-x-circle-fill";
+                if(!sbom.approved){
+                  safeColor = "#0d6efd";
+                  safeSymbol = "bi bi-question-circle-fill"
+                }
+                return (                
                 <tr>
                   <td>{sbom.vendor}</td>
                   <td>
-                    <Link to={sbom.vendor + '/' + 'sbom/' + sbom.id}>{sbom.name}</Link>
+                    <Link to={sbom.vendor + '/' + 'sbom/' + sbom.sbom_id}>{sbom.sbom}</Link>
                   </td>
                   <td>{sbom.version}</td>
-                  <td>{sbom.sourceSha}</td>
-                  <td><i class="bi bi-check-circle-fill" style={{color:'green'}}></i></td>
+                  <td><i className={approvedSymbol} style={{color:approvedColor}}></i></td>
+                  <td><i className={safeSymbol} style={{color:safeColor}}></i></td>
                 </tr>       
-              ))}
+              )})}
             </tbody>          
           </Table>
           <Row>

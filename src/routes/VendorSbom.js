@@ -1,8 +1,8 @@
 import React, {Fragment,useState,useEffect} from 'react';
 import SbomView from '../components/SbomView';
 import { Link, useParams } from 'react-router-dom';
-import { Table } from 'reactstrap';
-import { getMySbom, getVendorName, getVendorSubscriptions } from '../infrastructure/supabaseClient';
+import { Table, Input } from 'reactstrap';
+import { getMySbom, getVendorName, getVendorSubscriptions, getSubscriptionApproved, getSession,setSubscriptionApproval } from '../infrastructure/supabaseClient';
 import Sbom from '../infrastructure/Sbom';
 import Subscription from '../infrastructure/Subscription';
 
@@ -20,11 +20,17 @@ const VendorSbom = () => {
       return
     }
     let subs = []
+    let session = await getSession()
     for(var i = 0; i < subscriptionDtos.length; i++){
-      const subscriptionDto = subscriptionDtos[i];
+      const subscriptionDto = subscriptionDtos[i];    
+      const approved = await getSubscriptionApproved(session.user.id,subscriptionDto.client_id,subscriptionDto.sbom_id);
       subs.push(new Subscription({
         client : subscriptionDto.vendors.name,
-        cvss : subscriptionDto.cvss       
+        client_id : subscriptionDto.client_id,
+        vendor_id : session.user.id,
+        sbom_id : subscriptionDto.sbom_id,
+        cvss : subscriptionDto.cvss,
+        approved : approved
       }))
     }
     updateSubscriptions(subs)
@@ -49,6 +55,11 @@ const VendorSbom = () => {
     retrieveSbom();
   }, []);
 
+  const toggleApprove = async (subscription) => {
+    await setSubscriptionApproval(subscription.vendor_id, subscription.client_id, subscription.sbom_id, !subscription.approved)    ;
+    await getSubscriptions(sbom.id);
+  }
+
   return(sbom && 
     <Fragment>
       <SbomView name={sbom.name} version={sbom.version} vendor={sbom.vendor}/>    
@@ -59,12 +70,14 @@ const VendorSbom = () => {
           <thead>
             <th>Client</th>
             <th>CVSS</th>
+            <th>Approved</th>
           </thead>
           <tbody>
             {subscriptions.map((subscription) => (
                 <tr>
                   <td>{subscription.client}</td>
                   <td>{subscription.cvss}</td>
+                  <td><Input type="checkbox" checked={subscription.approved} onChange={async () => await toggleApprove(subscription)}/></td>
                 </tr>     
               ))}     
           </tbody>          
