@@ -157,7 +157,7 @@ async function createSubscription(sbom_id, cvss){
   
   const sbom = await getMySbom(sbom_id); 
 
-  const { data2, error2 } = await supabase.functions.invoke('populate-client-info', {
+  supabase.functions.invoke('populate-client-info', {
     body: { client_id: session.user.id, sbom_id: sbom_id, CVSS_Threshold: cvss, sbom : sbom.sbom, vendor_id : sbom.vendor_id, software_name: sbom.software_name}
   })
   
