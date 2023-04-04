@@ -6,7 +6,7 @@ import {
   Table, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button,
   Form, FormGroup, Label, Input} from 'reactstrap';
 import { Link} from 'react-router-dom';
-import { searchSboms, getClientSubscriptions, createSubscription, getSubscriptionApproved, getSession } from '../infrastructure/supabaseClient';
+import { searchSboms, getClientSubscriptions, createSubscription, getSubscriptionApproved, getSession, getClientSubscription } from '../infrastructure/supabaseClient';
 
 class Client extends Component {
   constructor(){
@@ -37,7 +37,8 @@ class Client extends Component {
       for(var i = 0; i < sbomDtos.length;i++){
         const sbomDto = sbomDtos[i];
         const approved = await getSubscriptionApproved(sbomDto.vendor_id,session.user.id,sbomDto.sbom_id);
-        console.log(approved)
+        const sub = await getClientSubscription(sbomDto.sbom_id);
+        console.log(sbomDto);
         sboms.push(new Subscription({
           sbom : sbomDto.software_name,
           vendor : sbomDto.vendor_name,
@@ -45,7 +46,8 @@ class Client extends Component {
           vendor_id : sbomDto.vendor_id,
           client_id : session.user.id,
           sbom_id: sbomDto.sbom_id,
-          approved: approved
+          approved: approved,
+          cvss: sub.cvss
         }))          
       }
     }
@@ -147,6 +149,7 @@ class Client extends Component {
               <th>Vendor</th>
               <th>Software Component Name</th>
               <th>Version</th>
+              <th>CVSS Threshold</th>
               <th>Approved?</th>
               <th>Safe?</th>
             </thead>
@@ -168,6 +171,7 @@ class Client extends Component {
                     <Link to={sbom.vendor + '/' + 'sbom/' + sbom.sbom_id}>{sbom.sbom}</Link>
                   </td>
                   <td>{sbom.version}</td>
+                  <td>{sbom.cvss}</td>
                   <td><i className={approvedSymbol} style={{color:approvedColor}}></i></td>
                   <td><i className={safeSymbol} style={{color:safeColor}}></i></td>
                 </tr>       
