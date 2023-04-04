@@ -151,10 +151,10 @@ async function createSubscription(sbom_id){
       { client_id: session.user.id, sbom_id: sbom_id }
     ])
   
-  //TODO Jacob can you help me make this work I think it should go here
-  //const { data2, error2 } = await supabase.functions.invoke('populate-client-info', {
-  //body: { client_id: session.user.id, vendor_id: 'GetFromVendorSbomTable', CVSS_Threshold: 'GetFromUI', software_name: 'GetFromVendorSbomTable', spdx: 'GetFromVendorSbomTable' },
-  //})
+
+  const { data2, error2 } = await supabase.functions.invoke('populate-client-info', {
+  body: { client_id: session.user.id, sbom_id: sbom_id, CVSS_Threshold: 5}
+  })
   
   return data;
 }
