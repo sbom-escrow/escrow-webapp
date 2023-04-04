@@ -88,13 +88,13 @@ const VendorSbom = () => {
     <Fragment>
       <SbomView sbom={sbom}/>    
       <div>
-        <Row>
+        {/*<Row>
             <Col xs='2'>
               <Button style={{marginTop:'10px'}} onClick={toggleModal}>
                 Update SBOM
               </Button>
             </Col>
-          </Row>
+          </Row>*/}
         <h4 style={{marginTop:'20px'}}>Subscriptions</h4>   
         {subscriptions && <Table>
           <thead>
