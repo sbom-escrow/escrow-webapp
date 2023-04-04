@@ -1,7 +1,7 @@
 import React, { Component, Fragment, useState } from 'react';
 import axios from 'axios';
 import Sbom from '../infrastructure/Sbom';
-import { ListGroup, ListGroupItem } from 'reactstrap';
+import { ListGroup, ListGroupItem, Table} from 'reactstrap';
 
 class SbomView extends Component {
   constructor(props){
@@ -17,6 +17,11 @@ class SbomView extends Component {
 
   render() {
     const sbom = this.state.sbom; 
+    const vulnerableComponents = sbom.name == "DangerousSoftware" ? 
+      [{
+        name:"lodash.merge",
+        version:"4.6.2",
+        url:"https://nvd.nist.gov/vuln/detail/CVE-2021-23337"}] : null;
     return (
       <Fragment>
         <div className="position-relative">                
@@ -35,6 +40,28 @@ class SbomView extends Component {
               <span>{sbom.sourceSha}</span>
             </ListGroupItem>
           </ListGroup>
+        </div>
+        <div>
+          <h4 style={{marginTop:'20px'}}>Vulnerable Components</h4>
+          {vulnerableComponents && <Table>
+          <thead>
+            <th>Component</th>
+            <th>Version</th>
+            <th>CVE</th>
+          </thead>
+          <tbody>
+            {vulnerableComponents.map((vulnerableComponent) => (
+                <tr>
+                  <td>{vulnerableComponent.name}</td>
+                  <td>{vulnerableComponent.version}</td>
+                  <td><a href={vulnerableComponent.url}>CVE</a></td>
+                </tr>     
+              ))}     
+          </tbody>          
+        </Table>}
+        {!vulnerableComponents &&
+          <div style={{margin:'20px',textAlign:'center', fontSize: 'x-large'}}>This Software is Safe!</div>
+        }
         </div>
       </Fragment>
     );
