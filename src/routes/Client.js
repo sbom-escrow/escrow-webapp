@@ -15,12 +15,14 @@ class Client extends Component {
       searchTerm:null,
       modal : false,
       searchSboms:[],
-      sboms:null      
+      sboms:null,
+      cvss:8     
     }
 
     this.toggleModal = this.toggleModal.bind(this);
     this.setSearchTerm = this.setSearchTerm.bind(this);
     this.populateSboms = this.populateSboms.bind(this);
+    this.updateSbomCvss = this.updateSbomCvss.bind(this);
   }
 
   componentDidMount() {
@@ -75,8 +77,14 @@ class Client extends Component {
   }
 
   async addSbom(sbom){
-    await createSubscription(sbom.id);
+    await createSubscription(sbom.id, this.state.cvss);
     await this.populateSboms();
+  }
+
+  updateSbomCvss(cvss){
+    this.setState((state, props) => {
+      return {cvss: cvss};
+    });
   }
 
   toggleModal() {
@@ -88,6 +96,7 @@ class Client extends Component {
 
   render() {
     const sboms = this.state.sboms;
+    const cvss = this.state.cvss;
     const modal = this.state.modal;
     const searchTerm = this.state.searchTerm;
     const searchSboms = this.state.searchSboms;
@@ -100,21 +109,27 @@ class Client extends Component {
                 <th>Vendor</th>
                 <th>Software Name</th>
                 <th>Version</th>
+                <th>CVSS Threshold</th>
                 <th></th>
               </thead>
               <tbody>
-                {searchSboms.map((sbom) => (
+                {searchSboms.map((sbom) => {
+                  sbom.cvss  = 5;
+                  return(
                   <tr>
                     <td>{sbom.vendor}</td>
                     <td>{sbom.name}</td>
                     <td>{sbom.version}</td>
+                    <th>
+                      <Input type="text" name="cvss" value={cvss} onChange={(e)=>this.updateSbomCvss(e.target.value)} style={{width:'50%'}}/>
+                    </th>
                     <td>
                       <Button color="success" onClick={() =>{this.addSbom(sbom)}}>
                         Subscribe
                       </Button>
                     </td>
                   </tr>       
-                ))}
+                )})}
               </tbody>          
             </Table>
     }
