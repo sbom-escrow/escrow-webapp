@@ -143,18 +143,22 @@ async function getVendorSubscriptions(sbom_id){
 }
 
 
-async function createSubscription(sbom_id){
+async function createSubscription(sbom_id, cvss){
+  if(!cvss)
+  {
+    cvss = 7
+  }
   const session = await getSession();
   const { data, error } = await supabase
     .from('client-sboms')  
     .insert([
-      { client_id: session.user.id, sbom_id: sbom_id }
+      { client_id: session.user.id, sbom_id: sbom_id, cvss:cvss }
     ])
   
   const sbom = await getMySbom(sbom_id); 
 
   const { data2, error2 } = await supabase.functions.invoke('populate-client-info', {
-    body: { client_id: session.user.id, sbom_id: sbom_id, CVSS_Threshold: 5, sbom : sbom.sbom, vendor_id : sbom.vendor_id, software_name: sbom.software_name}
+    body: { client_id: session.user.id, sbom_id: sbom_id, CVSS_Threshold: cvss, sbom : sbom.sbom, vendor_id : sbom.vendor_id, software_name: sbom.software_name}
   })
   
   return data;
