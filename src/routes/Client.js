@@ -155,7 +155,7 @@ class Client extends Component {
             </thead>
             <tbody>
               {sboms.map((sbom) => {
-                const safe = true;
+                const safe = sbom.sbom != "DangerousSoftware";
                 const approvedColor = sbom.approved ? "green" : "red";
                 const approvedSymbol = sbom.approved ? "bi bi-check-circle-fill" : "bi bi-x-circle-fill";
                 let safeColor = safe ? "green" : "red";
