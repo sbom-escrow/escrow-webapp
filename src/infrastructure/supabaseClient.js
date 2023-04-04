@@ -199,5 +199,17 @@ async function setSubscriptionApproval(vendor_id, client_id, sbom_id, approved){
   }      
 }
 
+async function getClientSubscription(sbom_id){
+  const session = await getSession();
+  const { data, error } = await supabase
+    .from('client-sboms')  
+    .select()
+    .eq('client_id',session.user.id)
+    .eq('sbom_id',sbom_id)
+  
+  if(!data || data.length == 0)
+    return null;  
+  return data[0];
+}
 
-export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getMySbom, getVendorSbom, getClientSubscriptions, createSubscription, getVendorSubscriptions,getSubscriptionApproved,setSubscriptionApproval, updateSbom };
+export { signOut, signUp, signInWithEmail , uploadSbom, getSession, getSboms, getVendorName, setVendorName, searchSboms, getMySbom, getVendorSbom, getClientSubscriptions, createSubscription, getVendorSubscriptions,getSubscriptionApproved,setSubscriptionApproval, updateSbom, getClientSubscription };
