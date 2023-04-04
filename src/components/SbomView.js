@@ -54,7 +54,7 @@ class SbomView extends Component {
                 <tr>
                   <td>{vulnerableComponent.name}</td>
                   <td>{vulnerableComponent.version}</td>
-                  <td><a href={vulnerableComponent.url}>CVE</a></td>
+                  <td><a target="_blank" href={vulnerableComponent.url}>CVE</a></td>
                 </tr>     
               ))}     
           </tbody>          
