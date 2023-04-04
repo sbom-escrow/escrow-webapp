@@ -122,16 +122,19 @@ class VendorView extends Component {
               <th>Safe?</th>
             </thead>
             <tbody>
-              {sboms.map((sbom) => (
-                <tr>
+              {sboms.map((sbom) => {
+                const safe = sbom.name != "DangerousSoftware";
+                let safeColor = safe ? "green" : "red";
+                let safeSymbol = safe ? "bi bi-check-circle-fill" : "bi bi-x-circle-fill";
+                return (<tr>
                   <td>
                     <Link to={'sbom/' + sbom.id}>{sbom.name}</Link>
                   </td>
                   <td>{sbom.version}</td>
                   <td>{sbom.sourceSha}</td>
-                  <td><i class="bi bi-check-circle-fill" style={{color:'green'}}></i></td>
+                  <td><i className={safeSymbol} style={{color:safeColor}}></i></td>
                 </tr>       
-              ))}
+              )})}
             </tbody>          
           </Table>
           <Row>
