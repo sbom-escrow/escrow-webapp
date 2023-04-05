@@ -21,7 +21,9 @@ class SbomView extends Component {
       [{
         name:"lodash.merge",
         version:"4.6.2",
-        url:"https://nvd.nist.gov/vuln/detail/CVE-2021-23337"}] : null;
+        url:"https://nvd.nist.gov/vuln/detail/CVE-2021-23337",
+        cve:"CVE-2021-23337"
+      }] : null;
     return (
       <Fragment>
         <div className="position-relative">                
@@ -54,7 +56,7 @@ class SbomView extends Component {
                 <tr>
                   <td>{vulnerableComponent.name}</td>
                   <td>{vulnerableComponent.version}</td>
-                  <td><a target="_blank" href={vulnerableComponent.url}>CVE</a></td>
+                  <td><a target="_blank" href={vulnerableComponent.url}>{vulnerableComponent.cve}</a></td>
                 </tr>     
               ))}     
           </tbody>          
