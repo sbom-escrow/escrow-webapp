@@ -12,6 +12,7 @@ import {
 const IdentityBar = () => {
 
 	const [session, updateSession] = useState()
+	const [vendor, updateVendor] = useState()
 	const [image, updateImage] = useState()
 
   useEffect(() => {
@@ -19,11 +20,12 @@ const IdentityBar = () => {
       var sessionTemp = await getSession();
       if(sessionTemp)
     	{
-	      var vendor = await getVendorName();
-	      if(vendor == "Demo Vendor"){
+	      var vendorTemp = await getVendorName();
+	      updateVendor(vendorTemp)
+	      if(vendorTemp == "Demo Vendor"){
 	      	updateImage(vinny);
 	      }
-	      else if(vendor == "Demo Client"){
+	      else if(vendorTemp == "Demo Client"){
 	      	updateImage(clark);
 	      }
     	}
@@ -45,14 +47,19 @@ const IdentityBar = () => {
 	{
 		return(
 	    <Fragment>
+
 	    	<a onClick={logout} style={{right:"0",position:"absolute",display:"inline-block",top:"0"}}>
+	    		<span style={{paddingRight:'20px', fontSize:'20px'}}>{vendor}</span>
 	    		<img style={{width:'60px'}} src={image} alt="avatar" className="position-relative img-fluid" />
 	    	</a>
 			</Fragment>
 		);
 	}
 	else if (session){
-		return(<Button onClick={logout}>Logout</Button>)
+		return(
+			<Fragment>
+				<Button onClick={logout}>Logout</Button>
+			</Fragment>)
 	}
 };
 
