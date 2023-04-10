@@ -41,7 +41,7 @@ const IdentityBar = () => {
     window.location="/account"
   }
 
-	if (session)
+	if (session && image)
 	{
 		return(
 	    <Fragment>
@@ -50,6 +50,9 @@ const IdentityBar = () => {
 	    	</a>
 			</Fragment>
 		);
+	}
+	else if (session){
+		return(<Button onClick={logout}>Logout</Button>)
 	}
 };
 
