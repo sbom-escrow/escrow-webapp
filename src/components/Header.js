@@ -3,8 +3,6 @@ import logo from '../Logo.png';
 import IdentityBar from './IdentityBar';
 import PrivilegedItems from './PrivilegedItems';
 
-
-
 import {
   Container, Row, Col, Form, Input, Button, Navbar, Nav,
   NavbarBrand, NavLink, NavItem, UncontrolledDropdown,

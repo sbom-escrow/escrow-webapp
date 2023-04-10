@@ -1,5 +1,8 @@
 import React, { Fragment, useEffect, useState} from 'react';
 import { signOut, getSession } from '../infrastructure/supabaseClient';
+import vinny from '../VinnyVendorAvatar.png';
+import clark from '../ClarkClientAvatar.png';
+import { getVendorName } from '../infrastructure/supabaseClient';
 
 import {
   Button
@@ -9,10 +12,22 @@ import {
 const IdentityBar = () => {
 
 	const [session, updateSession] = useState()
+	const [image, updateImage] = useState()
 
   useEffect(() => {
     const syncSession = async () => {
-      updateSession(await getSession());
+      var sessionTemp = await getSession();
+      if(sessionTemp)
+    	{
+	      var vendor = await getVendorName();
+	      if(vendor == "Demo Vendor"){
+	      	updateImage(vinny);
+	      }
+	      else if(vendor == "Demo Client"){
+	      	updateImage(clark);
+	      }
+    	}
+      updateSession(sessionTemp);
     }
     syncSession();
   }, []);
@@ -30,8 +45,9 @@ const IdentityBar = () => {
 	{
 		return(
 	    <Fragment>
-	    	<Button onClick={account} style={{marginRight:'5px'}}>Account</Button>
-				<Button onClick={logout}>Logout</Button>
+	    	<a onClick={logout} style={{right:"0",position:"absolute",display:"inline-block",top:"0"}}>
+	    		<img style={{width:'60px'}} src={image} alt="avatar" className="position-relative img-fluid" />
+	    	</a>
 			</Fragment>
 		);
 	}
