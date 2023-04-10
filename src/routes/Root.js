@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import bigLogo from '../Escrow Crow-2.png';
+import vinny from '../VinnyVendorAvatar.png';
+import clark from '../ClarkClientAvatar2.png';
 import { Badge } from 'reactstrap';
 
 class Root extends Component {
