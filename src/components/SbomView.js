@@ -1,6 +1,7 @@
 import React, { Component, Fragment, useState } from 'react';
 import axios from 'axios';
 import Sbom from '../infrastructure/Sbom';
+import DangerousSoftware from '../data/DangerousSoftware'
 import { ListGroup, ListGroupItem, Table} from 'reactstrap';
 
 class SbomView extends Component {
@@ -17,13 +18,8 @@ class SbomView extends Component {
 
   render() {
     const sbom = this.state.sbom; 
-    const vulnerableComponents = sbom.name == "DangerousSoftware" ? 
-      [{
-        name:"lodash.merge",
-        version:"4.6.2",
-        url:"https://nvd.nist.gov/vuln/detail/CVE-2021-23337",
-        cve:"CVE-2021-23337"
-      }] : null;
+    const vulnerableComponents = sbom.name == DangerousSoftware.vulnSoftwareName ? 
+      DangerousSoftware.vulnerableComponents : null;
     return (
       <Fragment>
         <div className="position-relative">                

@@ -12,7 +12,6 @@ const ClientSbom = () => {
   useEffect(() => {
     const retrieveSbom = async () => {
       const sbomDto = await getVendorSbom(id);
-      console.log(sbomDto)
       if(sbomDto)
         updateSbom(new Sbom({
           name : sbomDto.software_name,

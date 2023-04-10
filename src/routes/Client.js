@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import Sbom from '../infrastructure/Sbom';
 import Subscription from '../infrastructure/Subscription';
+import DangerousSoftware from '../data/DangerousSoftware'
 import { 
   Table, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button,
   Form, FormGroup, Label, Input} from 'reactstrap';
@@ -38,7 +39,6 @@ class Client extends Component {
         const sbomDto = sbomDtos[i];
         const approved = await getSubscriptionApproved(sbomDto.vendor_id,session.user.id,sbomDto.sbom_id);
         const sub = await getClientSubscription(sbomDto.sbom_id);
-        console.log(sbomDto);
         sboms.push(new Subscription({
           sbom : sbomDto.software_name,
           vendor : sbomDto.vendor_name,
@@ -155,7 +155,7 @@ class Client extends Component {
             </thead>
             <tbody>
               {sboms.map((sbom) => {
-                const safe = sbom.sbom != "DangerousSoftware";
+                const safe = sbom.sbom != DangerousSoftware.vulnSoftwareName;
                 const approvedColor = sbom.approved ? "green" : "red";
                 const approvedSymbol = sbom.approved ? "bi bi-check-circle-fill" : "bi bi-x-circle-fill";
                 let safeColor = safe ? "green" : "red";

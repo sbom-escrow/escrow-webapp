@@ -35,7 +35,6 @@ const authLoader = async () => {
 
 const notAuthedLoader = async () => {
   var session = await getSession();
-  console.log(session);
   if(session){
     throw redirect("/");
   }

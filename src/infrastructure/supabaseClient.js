@@ -171,7 +171,6 @@ async function getSubscriptionApproved(vendor_id, client_id, sbom_id){
     .eq('client_id',client_id)
     .eq('sbom_id',sbom_id)
     .eq('vendor_id',vendor_id)
-  console.log(data)
   if(!data || data.length == 0)
     return false;  
   return data[0].allowed;

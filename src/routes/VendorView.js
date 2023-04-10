@@ -1,6 +1,7 @@
 import React, { Component, Fragment, useState } from 'react';
 import axios from 'axios';
 import Sbom from '../infrastructure/Sbom';
+import DangerousSoftware from '../data/DangerousSoftware'
 import { 
   Table, Modal, ModalHeader, ModalBody, ModalFooter, Row, Col, Button,
   Form, FormGroup, Label, Input} from 'reactstrap';
@@ -85,7 +86,6 @@ class VendorView extends Component {
   }
 
   async uploadModal() {
-    console.log(this.state.modalSbomJson)
     await uploadSbom(new Sbom({
       name : this.state.modalName,
       version : this.state.modalVersion,
@@ -123,7 +123,7 @@ class VendorView extends Component {
             </thead>
             <tbody>
               {sboms.map((sbom) => {
-                const safe = sbom.name != "DangerousSoftware";
+                const safe = sbom.name != DangerousSoftware.vulnSoftwareName;
                 let safeColor = safe ? "green" : "red";
                 let safeSymbol = safe ? "bi bi-check-circle-fill" : "bi bi-x-circle-fill";
                 return (<tr>

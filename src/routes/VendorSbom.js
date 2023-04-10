@@ -41,10 +41,8 @@ const VendorSbom = () => {
   const retrieveSbom = async () => {
     const sbomDto = await getMySbom(id);
     const vendor = await getVendorName();
-    console.log("Retrieving SBOM Data")
     if(sbomDto)
     {
-      console.log("Looks Good")
       updateSbomState(new Sbom({
         name : sbomDto.software_name,
         sbomData : sbomDto.sbom,
