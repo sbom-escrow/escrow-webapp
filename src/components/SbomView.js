@@ -2,7 +2,7 @@ import React, { Component, Fragment, useState } from 'react';
 import axios from 'axios';
 import Sbom from '../infrastructure/Sbom';
 import DangerousSoftware from '../data/DangerousSoftware'
-import { ListGroup, ListGroupItem, Table} from 'reactstrap';
+import { Collapse, ListGroup, ListGroupItem, Table, Button} from 'reactstrap';
 
 class SbomView extends Component {
   constructor(props){
@@ -12,8 +12,14 @@ class SbomView extends Component {
         name : props.sbom.name,
         version : props.sbom.version,
         vendor : props.sbom.vendor
-      })
+      }),
+      collapse: false
     }
+    this.toggle = this.toggle.bind(this);
+  }
+
+ toggle() {
+    this.setState({ collapse: !this.state.collapse });
   }
 
   render() {
@@ -40,8 +46,16 @@ class SbomView extends Component {
           </ListGroup>
         </div>
         <div>
-          <h4 style={{marginTop:'20px'}}>Vulnerable Components</h4>
-          {vulnerableComponents && <Table>
+          
+          {vulnerableComponents && 
+          <Fragment>
+          <h4 style={{marginTop:'20px'}}>
+            <span>Vulnerable Components</span>
+            <Button color="primary" onClick={this.toggle} style={{ float:'right'}}>{this.state.collapse ? 'Hide' : 'Show' }</Button>
+          </h4>
+          
+          <Collapse isOpen={this.state.collapse}>
+          <Table>
           <thead>
             <th>Component</th>
             <th>Version</th>
@@ -56,9 +70,18 @@ class SbomView extends Component {
                 </tr>     
               ))}     
           </tbody>          
-        </Table>}
+        </Table>
+        </Collapse>
+        <Collapse isOpen={!this.state.collapse} style={{paddingTop:'1em'}}>
+          <hr/>
+        </Collapse>
+        </Fragment>
+      }
         {!vulnerableComponents &&
+          <Fragment>
+          <h4 style={{marginTop:'20px'}}>Vulnerable Components</h4>
           <div style={{margin:'20px',textAlign:'center', fontSize: 'x-large'}}>This Software is Safe!</div>
+          </Fragment>
         }
         </div>
       </Fragment>

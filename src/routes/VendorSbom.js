@@ -1,7 +1,7 @@
 import React, {Fragment,useState,useEffect} from 'react';
 import SbomView from '../components/SbomView';
 import { Link, useParams } from 'react-router-dom';
-import { Table, Input, Row, Col, Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label,  } from 'reactstrap';
+import { Table, Input, Row, Col, Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Collapse  } from 'reactstrap';
 import { getMySbom, getVendorName, getVendorSubscriptions, getSubscriptionApproved, getSession,setSubscriptionApproval, updateSbom } from '../infrastructure/supabaseClient';
 import Sbom from '../infrastructure/Sbom';
 import Subscription from '../infrastructure/Subscription';
@@ -14,6 +14,7 @@ const VendorSbom = () => {
   const [modalSbom, updateModalSbom] = useState(null)
   const [modalVersion, updateModalVersion] = useState(null)
   const [subscriptions, updateSubscriptions] = useState(null)
+  const [collapse, updateCollapse] = useState(false)
 
   const getSubscriptions = async (id) => {
     const subscriptionDtos = await getVendorSubscriptions(id);
@@ -82,6 +83,10 @@ const VendorSbom = () => {
     await getSubscriptions(sbom.id);
   }
 
+  const toggleCollapse = () => {
+    updateCollapse(!collapse);
+  }
+
   return(sbom && 
     <Fragment>
       <SbomView sbom={sbom}/>    
@@ -93,8 +98,15 @@ const VendorSbom = () => {
               </Button>
             </Col>
           </Row>*/}
-        <h4 style={{marginTop:'20px'}}>Subscriptions</h4>   
-        {subscriptions && <Table>
+        
+        {subscriptions && 
+        <Fragment>
+        <h4 style={{marginTop:'20px'}}>
+        <span>Subscriptions</span>
+        <Button color="primary" onClick={toggleCollapse} style={{ float:'right'}}>{collapse ? 'Hide' : 'Show' }</Button>
+        </h4>  
+        <Collapse isOpen={collapse}> 
+        <Table>
           <thead>
             <th>Client</th>
             <th>CVSS</th>
@@ -109,9 +121,19 @@ const VendorSbom = () => {
                 </tr>     
               ))}     
           </tbody>          
-        </Table>}
+        </Table>
+        </Collapse>
+        <Collapse isOpen={!collapse} style={{paddingTop:'1em'}}> 
+          
+          <hr/>
+        </Collapse>
+        </Fragment>
+      }
         {!subscriptions &&
+          <Fragment>
+          <h4 style={{marginTop:'20px'}}>Subscriptions</h4>   
           <div style={{margin:'20px',textAlign:'center', fontSize: 'x-large'}}>No clients are subscribed to this Software</div>
+          </Fragment>
         }
       </div>
       <Modal isOpen={modal} toggle={toggleModal} >
