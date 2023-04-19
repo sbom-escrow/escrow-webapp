@@ -22,10 +22,10 @@ const IdentityBar = () => {
     	{
 	      var vendorTemp = await getVendorName();
 	      updateVendor(vendorTemp)
-	      if(vendorTemp == "Demo Vendor"){
+	      if(vendorTemp == "Vinny The Vendor"){
 	      	updateImage(vinny);
 	      }
-	      else if(vendorTemp == "Demo Client"){
+	      else if(vendorTemp == "Clark The Client"){
 	      	updateImage(clark);
 	      }
     	}
