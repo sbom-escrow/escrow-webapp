@@ -1,4 +1,4 @@
-const vulnSoftwareName = "DangerousSoftware"
+const vulnSoftwareName = "Brand New Product"
 const vulnerableComponents = [{
         name:"log4j-core",
         version:"2.0 beta9",
